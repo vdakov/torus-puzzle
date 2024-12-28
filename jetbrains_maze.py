@@ -4,7 +4,6 @@ import numpy as np
 import time
 import matplotlib as mpl 
 
-
 # Generates a toroidal grid world with a random start and goal position.
 def generate_grid(width, height):
     grid = [[0 for _ in range(height)] for _ in range(width)]
@@ -46,7 +45,6 @@ def policy_spiral(grid, current, goal):
     ny, nx = current
     height, width = grid.shape
 
-
     if direction == 0:  # Move right
         nx = (nx + 1) % width
     elif direction == 1:  # Move down
@@ -65,7 +63,6 @@ def policy_spiral(grid, current, goal):
             step_size += 1
     return ny, nx
 
-
 def policy_diagonal(grid, current, goal):
     global counter
     height, width = grid.shape
@@ -81,8 +78,6 @@ def policy_diagonal(grid, current, goal):
         ny = (ny + delta_y) % height
 
     counter = (counter + 1) % 2
-
-
     return ny, nx
 
 def visualize(grid, path=None, start=None, goal=None):
@@ -104,7 +99,6 @@ def visualize(grid, path=None, start=None, goal=None):
             plt.scatter(step[1], step[0], color = 'blue', s=100, alpha=0.6)
             plt.text(step[1], step[0], str(i + 1), color="black", ha="center", va="center", fontsize=12, fontweight="bold")
     plt.show() 
-
 
 # Runs the simulation for a given policy and records the path taken.
 def do_run(grid, start, goal, policy):
@@ -129,11 +123,9 @@ def do_run(grid, start, goal, policy):
         ny, nx = policy(grid, current, goal)
         current = (ny, nx)
         
-      
     direction = 0
     counter = 0
     step_size = 1
-
 
     return path 
 
@@ -149,11 +141,8 @@ if __name__ == "__main__":
         (9999, 100), (123, 456), (77, 1300), (300, 3333), (100, 9999)
     ]
     
-
     for (width, height) in grids:
         for i in range(num_runs):
-            # width, height = generate_random_AB(1000000, shuffle=True)
-
             grid, start, goal = generate_grid(width, height)
             S = width * height
 
@@ -164,8 +153,6 @@ if __name__ == "__main__":
             # path = do_run(grid, start, goal, policy_spiral)
 
             results.append(len(path))
-
-
             print((width, height), '|Path length:', len(path), '|S:', S, '|Proportion path-S:', len(path)/ S, 'ln (n)', np.log(S))
             
             # visualize(grid, path=path, start=start, goal=goal)

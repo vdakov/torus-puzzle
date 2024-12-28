@@ -111,7 +111,7 @@ steps or $S \cdot 10^6 S$
 
 \subsection*{Improved Solution}
 
-My solutions greatly improves on edge cases like the one in the baseline
+My solution greatly improves on edge cases like the one in the baseline
 solution, while staying linear. It is a diagonal algorithm, iterating in the
 $x-$ and $y-$ axes by taking steps along an irrational slope with steps sizes
 $\Delta x = (\sqrt 5 - 1)/2$ and $\Delta y = 1$. It guarantees that it
@@ -152,53 +152,61 @@ the coupon collector's problem from probability theory \cite{coupon-collector}.
 It gives us an upper bound of the number of steps we may need to take to
 enumerate the unit circle.
 
-This upper bound is ${E} (T)=S\cdot H_{S}=S\log S+\gamma S+{\frac {1}{2}}+O(1/S)$ where $T$ is the number of steps expected to cover the square, $S$ is the area of the grid, $H_S$ is the $S$th harmonic number and
-$\gamma \approx 0.577215...$ or the Euler-Mascheroni constant \cite{coupon-collector}.
+This upper bound is ${E} (T)=S\cdot H_{S}=S\log S+\gamma S+{\frac
+    {1}{2}}+O(1/S)$ where $T$ is the number of steps expected to cover the square,
+$S$ is the area of the grid, $H_S$ is the $S$th harmonic number and $\gamma
+    \approx 0.577215...$ or the Euler-Mascheroni constant \cite{coupon-collector}.
 
 Naturally, there is clumsiness here due to our assumptions and the the discrete
 nature of our torus, and for how large the $N$ needs to be to ensure low
 discrepancy. Empirically, however, the approximation seems to be good enough,
 results ranged between $[1 \cdot S, 18\cdot S]$, well in the limits. . Some
-edge cases might be possible, however, violating the $O(35\cdot S) $ constraint.
-This is also dependent on the step-size, where the golden ration I used has
-better theoretical properties.
+edge cases might be possible, however, violating the $O(35\cdot S) $
+constraint. This is also dependent on the step-size, where the golden ration I
+used has better theoretical properties.
 
 \begin{figure}[H]
-\centering
-\begin{minipage}{0.5\textwidth}
-    \begin{algorithm}[H]
-        \caption{Irrational Movement Policy}\label{alg:diagonal}
-        \begin{algorithmic}[1]
-            \Require Grid dimensions, current position $(nx, ny)$, goal position, and global variable: \texttt{counter}.
-            \Ensure Next position $(nx, ny)$.
-            \State Extract $nx, ny$ from the current position.
-            \State $\Delta_x \gets (\sqrt{5} - 1) / 2$ \Comment{Golden ratio adjustment}
-            \State $\Delta_y \gets 1$
-            \If{\texttt{counter} = 0} \Comment{Adjust $x$ coordinate}
-            \State $nx \gets (nx + \Delta_x) \bmod \texttt{width}$
-            \ElsIf{\texttt{counter} = 1} \Comment{Adjust $y$ coordinate}
-            \State $ny \gets (ny + \Delta_y) \bmod \texttt{height}$
-            \EndIf
-            \State \texttt{counter} $\gets (\texttt{counter} + 1) \bmod 2$
-            \State \Return $(nx, ny)$
-        \end{algorithmic}
-    \end{algorithm}
-    \end{minipage}
-\hfill
-\begin{minipage}{0.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{grid_irrational.png}
-    \caption{Approximate vissualization of the irrational grid policy. Image credit: \url{https://i.sstatic.net/MIt2B.png}}
-    \label{fig:visualization-of-diagonal-algorithm}
-\end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \begin{algorithm}[H]
+            \caption{Irrational Movement Policy}\label{alg:diagonal}
+            \begin{algorithmic}[1]
+                \Require Grid dimensions, current position $(nx, ny)$, goal position, and global variable: \texttt{counter}.
+                \Ensure Next position $(nx, ny)$.
+                \State Extract $nx, ny$ from the current position.
+                \State $\Delta_x \gets (\sqrt{5} - 1) / 2$ \Comment{Golden ratio adjustment}
+                \State $\Delta_y \gets 1$
+                \If{\texttt{counter} = 0} \Comment{Adjust $x$ coordinate}
+                \State $nx \gets (nx + \Delta_x) \bmod \texttt{width}$
+                \ElsIf{\texttt{counter} = 1} \Comment{Adjust $y$ coordinate}
+                \State $ny \gets (ny + \Delta_y) \bmod \texttt{height}$
+                \EndIf
+                \State \texttt{counter} $\gets (\texttt{counter} + 1) \bmod 2$
+                \State \Return $(nx, ny)$
+            \end{algorithmic}
+        \end{algorithm}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{grid_irrational.png}
+        \caption{Approximate vissualization of the irrational grid policy. Image credit: \url{https://i.sstatic.net/MIt2B.png}}
+        \label{fig:visualization-of-diagonal-algorithm}
+    \end{minipage}
 \end{figure}
+
+Various grid sizes were tested, symmetric, non symmetric, heavily skewed, and
+such to ensure all properties were tested. Some examples are: (3, 3), (4, 5),
+(9, 9), (100, 100), (1000, 1000), (1, 10), (1, 1000), (1000, 1), (1, 1000000),
+(500, 500), (250, 400), (50, 50), (25, 40), (2, 5000).
 
 \section{Alternatives considered}
 
 Creating heuristics was an alternative considered for this task. Most
 predominantly, Euclidean distance was tested modularly, to ensure admissibility
 and consistency on the sequence created. As expected, it performs optimally and
-finds the shortest part of the goal each time. This was deemed "cheating" and
+finds the shortest part of the goal each time. In general, all heuristics seemed to give 
+away some spatial information. This was deemed "cheating" and
 violating the problem conditions, however, as we were giving the agent
 information on the location of the goal.
 
